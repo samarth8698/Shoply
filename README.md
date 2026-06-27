@@ -1,23 +1,20 @@
 # 🛒 Shoply – Full Stack E-Commerce Application
 
-Shoply is a Full Stack E-Commerce Application developed using **React.js**, **Spring Boot**, **Spring Security (JWT)**, **Spring Data JPA**, **MySQL**, and **Razorpay**.
+Shoply is a Full Stack E-Commerce Application developed using React.js, Spring Boot, Spring Security (JWT), Spring Data JPA, MySQL, and Razorpay.
 
 The project provides a complete online shopping experience including secure authentication, product management, online payments, order tracking, wishlist, reviews, and an admin dashboard.
 
+## 🚀 Project Overview
 
-# 🚀 Project Overview:-
-
-Shoply follows a **Three-Tier Architecture**.
+Shoply follows a Three-Tier Architecture.
 
 - 🎨 Frontend → React + Vite
 - ⚙️ Backend → Spring Boot + Spring Security
 - 🗄️ Database → MySQL
 
+## ✨ Main Features
 
-# ✨ Main Features:-
-
-## Authentication:-
-
+### Authentication
 - JWT Authentication
 - Login
 - Signup
@@ -26,15 +23,12 @@ Shoply follows a **Three-Tier Architecture**.
 - Reset Password
 - Change Password
 
-
-## Customer:-
-
+### Customer
 - Home
 - Shop
 - Categories
 - Product Details
-- Search
-- Filters
+- Search and Filters
 - Wishlist
 - Cart
 - Checkout
@@ -44,27 +38,23 @@ Shoply follows a **Three-Tier Architecture**.
 - Reviews & Ratings
 - User Profile
 
-
-## Admin:-
-
+### Admin
 - Dashboard
 - Products
 - Orders
 - Users
 - Payments
 
+## 🛠️ Technologies
 
-
-# 🛠️ Technologies:-
-
-## Frontend:-
+### Frontend
 - React
 - Vite
 - Axios
 - Tailwind CSS
 - React Router
 
-## Backend:-
+### Backend
 - Java 17
 - Spring Boot
 - Spring Security
@@ -72,69 +62,16 @@ Shoply follows a **Three-Tier Architecture**.
 - JWT
 - Razorpay
 
-## Database:-
+### Database
 - MySQL
 
+## 📂 Project Structure
 
-
-# 📂 Project Structure:-
-
+```text
 Shoply
-│
 ├── Frontend
-│     └── shopping
-│
+│   └── shopping
 ├── Backend
-│     └── Shoply-Backend
-│
+│   └── Shoply-Backend
 └── Database
-      └── shoply.sql
-
-
-
-# ⚙️ Setup
-
-Clone:-
-
-  bash
-git clone https://github.com/samarth8698/Shoply.git
-
-
-Frontend:-
-
-  bash
-cd Frontend/shopping
-npm install
-npm run dev
-
-
-Backend:-
-
-  bash
-cd Backend/Shoply-Backend
-mvn spring-boot:run
-
-
-Database:-
-  Import
-Database/shoply.sql
-
-
-
-
-# 📈 Future Improvements:-
-
-- Coupon System
-- Address Book
-- Invoice PDF
-- Return & Refund
-- Cloud Deployment
-
-
-
-# 👨‍💻 Developer
-
-**Samarth Adhao**
-
-GitHub:-
-https://github.com/samarth8698
+    └── shoply.sql
