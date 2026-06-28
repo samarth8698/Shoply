@@ -1,70 +1,49 @@
-\# 🛒 Shoply Backend
-
-
+# 🛒 Shoply Backend
 
 A backend REST API for the \*\*Shoply E-Commerce Application\*\* built using \*\*Spring Boot\*\*, \*\*Spring Data JPA\*\*, and \*\*MySQL\*\*. The application provides APIs for managing products, orders, and wishlists following a layered architecture.
 
 
-
-\---
-
+## 🚀 Features
 
 
-\## 🚀 Features
+- Product Management
 
+- Order Management
 
+- Wishlist Management
 
-\- Product Management
+- RESTful APIs
 
-\- Order Management
+- Spring Data JPA
 
-\- Wishlist Management
+- MySQL Database Integration
 
-\- RESTful APIs
+- Exception Handling
 
-\- Spring Data JPA
-
-\- MySQL Database Integration
-
-\- Exception Handling
-
-\- Layered Architecture
+- Layered Architecture
 
 
 
-\---
+## 🛠️ Technologies Used
+
+- Java 17
+
+- Spring Boot
+
+- Spring Data JPA
+
+- Spring Web
+
+- Hibernate
+
+- Maven
+
+- MySQL
 
 
+## 📂 Project Structure
 
-\## 🛠️ Technologies Used
-
-
-
-\- Java 17
-
-\- Spring Boot
-
-\- Spring Data JPA
-
-\- Spring Web
-
-\- Hibernate
-
-\- Maven
-
-\- MySQL
-
-
-
-\---
-
-
-
-\## 📂 Project Structure
-
-
-
-```text
+text
 
 src
 
@@ -130,35 +109,17 @@ src
 
 └── test
 
-```
 
+## ⚙️ Database Configuration
 
-
-\---
-
-
-
-\## ⚙️ Database Configuration
-
-
-
-Configure the database in:
-
-
-
-```
+Configure the database in:-
 
 src/main/resources/application.properties
 
-```
 
+Example:-
 
-
-Example:
-
-
-
-```properties
+properties:-
 
 spring.datasource.url=jdbc:mysql://localhost:3306/shoply
 
@@ -166,89 +127,48 @@ spring.datasource.username=root
 
 spring.datasource.password=YOUR\_PASSWORD
 
-
-
 spring.jpa.hibernate.ddl-auto=update
 
 spring.jpa.show-sql=true
 
-
-
 server.port=8080
 
-```
 
+## ▶️ Running the Project
 
-
-\---
-
-
-
-\## ▶️ Running the Project
-
-
-
-Clone the repository:
-
-
-
-```bash
+Clone the repository:-
+bash
 
 git clone https://github.com/samarth8698/Shoply.git
 
-```
+
+Navigate to the backend folder:-
 
 
-
-Navigate to the backend folder:
-
-
-
-```bash
+bash
 
 cd Backend/Shoply-Backend
 
-```
 
 
+Run using Maven:-
 
-Run using Maven:
-
-
-
-```bash
+bash
 
 mvn spring-boot:run
 
-```
 
-
-
-Or run:
-
-
-
-```
+Or run:-
 
 ShoplyBackendApplication.java
-
-```
-
 
 
 from Eclipse / STS.
 
 
+## 📁 Architecture:-
 
-\---
-
-
-
-\## 📁 Architecture
-
-
-
-```text
+text
 
 Client
 
@@ -272,55 +192,26 @@ Repository
 
 MySQL Database
 
-```
+
+## 📌 Future Enhancements:-
+
+- JWT Authentication
+
+- Role-Based Authorization
+
+- Payment Gateway Integration
+
+- Product Search \& Filtering
+
+- Image Upload
+
+- Email Notifications
 
 
+## 👨‍💻 Author:-
 
-\---
-
-
-
-\## 📌 Future Enhancements
+Samarth Adhao
 
 
-
-\- JWT Authentication
-
-\- Role-Based Authorization
-
-\- Payment Gateway Integration
-
-\- Product Search \& Filtering
-
-\- Image Upload
-
-\- Email Notifications
-
-
-
-\---
-
-
-
-\## 👨‍💻 Author
-
-
-
-\*\*Samarth Adhao\*\*
-
-
-
-GitHub: https://github.com/samarth8698
-
-
-
-\---
-
-
-
-\## ⭐ Support
-
-
-
-If you found this project useful, don't forget to \*\*Star ⭐ the repository\*\*.
-
+GitHub:-
+https://github.com/samarth8698
