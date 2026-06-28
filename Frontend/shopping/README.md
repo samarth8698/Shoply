@@ -1,20 +1,149 @@
-<<<<<<< HEAD
-# React + Vite
+# 🛒 Shoply Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive frontend for the **Shoply E-Commerce Application** built with **React** and **Vite**. The application communicates with the Spring Boot backend using REST APIs and provides a smooth shopping experience.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+# 🚀 Features:-
 
-## React Compiler
+* 🏠 Home Page
+* 🛍️ Product Listing
+* 📦 Product Details
+* ❤️ Wishlist Management
+* 🛒 Shopping Cart
+* 💳 Checkout Page
+* 📋 Order Management
+* 🚚 Order Tracking
+* 🔐 User Login & Signup
+* 📱 Responsive UI
+* 🔗 REST API Integration
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+# 🛠️ Technologies Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Shoply
->>>>>>> 74844af34c5830798f060e23c0c184d6b061d6cf
+* React.js
+* Vite
+* JavaScript (ES6)
+* HTML5
+* CSS3
+* Bootstrap
+* Axios
+* React Router DOM
+
+
+# 📂 Project Structure
+
+text
+
+shopping
+│
+├── public/
+│
+├── src/
+│   ├── components/
+│   │   ├── admin/
+│   │   ├── Cart.jsx
+│   │   ├── Categories.jsx
+│   │   ├── Checkout.jsx
+│   │   ├── Contact.jsx
+│   │   ├── Home.jsx
+│   │   ├── Layout.jsx
+│   │   ├── Login.jsx
+│   │   ├── Logo.jsx
+│   │   ├── MyOrders.jsx
+│   │   ├── NewArrivals.jsx
+│   │   ├── OrderSuccess.jsx
+│   │   ├── OrderTracking.jsx
+│   │   ├── Shop.jsx
+│   │   ├── ShopDetails.jsx
+│   │   ├── Signup.jsx
+│   │   └── Wishlist.jsx
+│   │
+│   ├── services/
+│   │   ├── orderService.js
+│   │   ├── productService.js
+│   │   └── wishlistService.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   ├── App.css
+│   └── index.css
+│
+├── package.json
+├── vite.config.js
+└── README.md
+
+
+
+# ⚙️ Installation
+
+Clone the repository
+
+bash
+git clone https://github.com/samarth8698/Shoply.git
+
+
+Go to frontend folder
+
+bash
+cd Frontend/shopping
+
+
+Install dependencies
+
+bash
+npm install
+
+
+Run the application
+
+bash
+npm run dev
+
+
+Frontend runs on
+
+text
+http://localhost:5173
+
+
+# 🔗 Backend
+
+Run the Spring Boot backend before starting the frontend.
+
+Default Backend URL
+
+text
+http://localhost:8080
+
+
+# 📁 Architecture
+
+text
+React Components
+        │
+React Router
+        │
+Axios Services
+        │
+Spring Boot REST API
+        │
+MySQL Database
+
+
+# 📌 Future Improvements
+
+* JWT Authentication
+* Search & Filters
+* Online Payments
+* User Profile
+* Admin Dashboard
+* Product Reviews
+* Email Notifications
+
+
+# 👨‍💻 Developer:-
+**Samarth Adhao**
+
+
+GitHub:-
+https://github.com/samarth8698
