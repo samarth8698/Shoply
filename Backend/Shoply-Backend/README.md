@@ -208,7 +208,7 @@ MySQL Database
 - Email Notifications
 
 
-## 👨‍💻 Author:-
+## 👨‍💻 Developer:-
 
 Samarth Adhao
 
