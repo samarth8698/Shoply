@@ -1,85 +1,196 @@
 # 🛒 Shoply Backend
 
-A backend REST API for the **Shoply E-Commerce Application** built using **Spring Boot**, **Spring Data JPA**, and **MySQL**. The application provides APIs for managing products, orders, and wishlists following a layered architecture.
+A powerful RESTful backend for the **Shoply E-Commerce Application** built using **Spring Boot**, **Spring Security (JWT)**, **Spring Data JPA**, and **MySQL**.
 
----
+The backend handles authentication, product management, orders, payments, reviews, wishlist, user management, and email notifications through secure REST APIs.
 
-## 🚀 Features
 
-- Product Management
-- Order Management
-- Wishlist Management
-- RESTful APIs
-- Spring Data JPA
-- MySQL Database Integration
-- Exception Handling
-- Layered Architecture
 
----
+# 🚀 Features:-
 
-## 🛠️ Technologies Used
+## 🔐 Authentication:-
+
+- JWT Authentication
+- User Registration
+- User Login
+- Forgot Password
+- OTP Verification
+- Reset Password
+- Change Password
+
+
+
+## 🛍️ Product Management:-
+
+- Add Product
+- Update Product
+- Delete Product
+- View Products
+- Product Details
+
+
+
+## 📦 Order Management:-
+
+- Place Order
+- View Orders
+- Order Tracking
+- Order Status Updates
+
+
+
+## ❤️ Wishlist:-
+
+- Add to Wishlist
+- Remove from Wishlist
+- View Wishlist
+
+
+
+## ⭐ Product Reviews:-
+
+- Add Review
+- View Reviews
+- Product Ratings
+
+
+
+## 💳 Payment:-
+
+- Razorpay Payment Integration
+- Payment Verification
+- Payment Records
+
+:-
+
+## 👤 User Management:-
+
+- User Profile
+- Update Profile
+- Change Password
+
+
+
+## 📧 Email Service:-
+
+- OTP Email
+- Password Reset Email
+- Order Notification Support
+
+
+
+# 🛠️ Technologies Used:-
 
 - Java 17
 - Spring Boot
+- Spring Security
 - Spring Data JPA
-- Spring Web
 - Hibernate
 - Maven
+- JWT
+- Razorpay SDK
 - MySQL
 
----
 
-## 📂 Project Structure
 
-```text
-src
-├── main
+# 📂 Project Structure:-
+
+Shoply-Backend
+│
+├── src
+│   ├── main
+│   │
 │   ├── java
 │   │   └── com.shoply
+│   │       │
 │   │       ├── ShoplyBackendApplication.java
-│   │       ├── config/
-│   │       ├── controller/
-│   │       │     ├── OrderController.java
-│   │       │     ├── ProductController.java
-│   │       │     └── WishlistController.java
-│   │       ├── dto/
-│   │       ├── entity/
-│   │       │     ├── Order.java
-│   │       │     ├── Product.java
-│   │       │     └── Wishlist.java
-│   │       ├── exception/
-│   │       ├── repository/
-│   │       │     ├── OrderRepository.java
-│   │       │     ├── ProductRepository.java
-│   │       │     └── WishlistRepository.java
-│   │       ├── service/
-│   │       │     ├── OrderService.java
-│   │       │     ├── ProductService.java
-│   │       │     └── WishlistService.java
-│   │       └── util/
+│   │       │
+│   │       ├── config
+│   │       │   ├── RazorpayConfig.java
+│   │       │   └── SecurityConfig.java
+│   │       │
+│   │       ├── controller
+│   │       │   ├── AuthController.java
+│   │       │   ├── OrderController.java
+│   │       │   ├── PaymentController.java
+│   │       │   ├── ProductController.java
+│   │       │   ├── ReviewController.java
+│   │       │   ├── UserController.java
+│   │       │   └── WishlistController.java
+│   │       │
+│   │       ├── dto
+│   │       │   ├── AuthResponse.java
+│   │       │   ├── ChangePasswordRequest.java
+│   │       │   ├── ForgotPasswordRequest.java
+│   │       │   ├── LoginRequest.java
+│   │       │   ├── PaymentVerificationRequest.java
+│   │       │   ├── ResetPasswordRequest.java
+│   │       │   ├── SignupRequest.java
+│   │       │   └── VerifyOtpRequest.java
+│   │       │
+│   │       ├── entity
+│   │       │   ├── Order.java
+│   │       │   ├── Payment.java
+│   │       │   ├── Product.java
+│   │       │   ├── Review.java
+│   │       │   ├── Role.java
+│   │       │   ├── User.java
+│   │       │   └── Wishlist.java
+│   │       │
+│   │       ├── repository
+│   │       │   ├── OrderRepository.java
+│   │       │   ├── PaymentRepository.java
+│   │       │   ├── ProductRepository.java
+│   │       │   ├── ReviewRepository.java
+│   │       │   ├── UserRepository.java
+│   │       │   └── WishlistRepository.java
+│   │       │
+│   │       ├── security
+│   │       │   ├── CustomUserDetailsService.java
+│   │       │   ├── JwtAuthenticationFilter.java
+│   │       │   └── JwtService.java
+│   │       │
+│   │       ├── service
+│   │       │   ├── AuthService.java
+│   │       │   ├── EmailService.java
+│   │       │   ├── OrderService.java
+│   │       │   ├── PaymentService.java
+│   │       │   ├── ProductService.java
+│   │       │   ├── ReviewService.java
+│   │       │   ├── UserService.java
+│   │       │   └── WishlistService.java
+│   │       │
+│   │       └── util
+│   │           └── RazorpaySignatureUtil.java
 │   │
 │   └── resources
-│       ├── static/
-│       ├── templates/
+│       ├── static
+│       │   └── images
+│       │       └── Shoply-logo.png
+│       │
+│       ├── templates
 │       └── application.properties
 │
-└── test
-```
+├── src/test
+├── pom.xml
+├── mvnw
+├── mvnw.cmd
+└── README.md
 
----
 
-## ⚙️ Database Configuration
 
-Configure the database in:
 
-```
-src/main/resources/application.properties
-```
+# ⚙️ Configuration:-
 
-Example:
+Configure MySQL database inside:-
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/shoply
+src/main/resources/application.properties:-
+
+Example
+
+  properties:-
+  
+spring.datasource.url=jdbc:mysql://localhost:3306/Shoply
 spring.datasource.username=root
 spring.datasource.password=YOUR_PASSWORD
 
@@ -87,43 +198,50 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
 server.port=8080
-```
 
----
 
-## ▶️ Running the Project
 
-Clone the repository:
+# ▶️ Running the Backend:-
 
-```bash
+Clone Repository:-
+
 git clone https://github.com/samarth8698/Shoply.git
-```
 
-Navigate to the backend folder:
 
-```bash
+Navigate:-
+
 cd Backend/Shoply-Backend
-```
 
-Run using Maven:
 
-```bash
+Run:-
 mvn spring-boot:run
-```
 
-Or run:
-
-```
+or run:-
 ShoplyBackendApplication.java
-```
 
-from Eclipse / STS.
 
----
+from Eclipse / STS. :-
 
-## 📁 Architecture
+Backend URL :-
+http://localhost:8080
 
-```text
+
+
+
+# 🔗 REST APIs:-
+
+- Authentication APIs
+- User APIs
+- Product APIs
+- Order APIs
+- Payment APIs
+- Review APIs
+- Wishlist APIs
+
+
+
+# 🏗️ Backend Architecture:-
+
 Client
    │
 REST API
@@ -135,29 +253,21 @@ Service
 Repository
    │
 MySQL Database
-```
 
----
 
-## 📌 Future Enhancements
+# 📈 Future Enhancements:-
 
-- JWT Authentication
-- Role-Based Authorization
-- Payment Gateway Integration
-- Product Search & Filtering
-- Image Upload
-- Email Notifications
+- Coupon & Promo Code APIs
+- Address Management
+- Invoice PDF APIs
+- Return & Refund APIs
+- Cloud Deployment
 
----
 
-## 👨‍💻 Author
+
+# 👨‍💻 Developer:-
 
 **Samarth Adhao**
 
-GitHub: https://github.com/samarth8698
-
----
-
-## ⭐ Support
-
-If you found this project useful, don't forget to **Star ⭐ the repository**.
+GitHub:-
+https://github.com/samarth8698
