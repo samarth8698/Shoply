@@ -8,7 +8,7 @@ COPY src/ src/
 
 RUN chmod +x mvnw
 
-RUN ./mvnw -e -DskipTests clean package
+RUN ./mvnw -e -DskipTests clean package && ls -lh target/ && jar tf target/shoply-backend-0.0.1-SNAPSHOT.jar | grep ShoplyBackendApplication
 
 FROM eclipse-temurin:17-jre
 
