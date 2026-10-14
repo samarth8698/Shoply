@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/wishlist";
+const API_URL = "https://shoply-backend-p6zl.onrender.com/wishlist";
 
 export const getWishlist = async () => {
   const response = await axios.get(API_URL);
