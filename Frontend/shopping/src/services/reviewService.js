@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/reviews";
+const API_URL = "https://shoply-backend-p6zl.onrender.com/api/reviews";
 
 export const getReviews = (productId) => {
   return axios.get(`${API_URL}/${productId}`);
