@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/payments";
+const API_URL = "https://shoply-backend-p6zl.onrender.com/payments";
 
 export const createOrder = async (amount) => {
   const response = await axios.post(`${API_URL}/create-order`, {
