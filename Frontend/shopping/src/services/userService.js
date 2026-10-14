@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/users";
+const API = "https://shoply-backend-p6zl.onrender.com/users";
 
 export const getUsers = () => axios.get(API);
 
