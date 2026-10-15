@@ -94,6 +94,7 @@ console.log("Saved cart:", localStorage.getItem("cartItems"));
 
 window.dispatchEvent(new Event("cartUpdated"));
 
+console.log("ADD BUTTON HANDLER RUNNING");
 alert(`${product.name} added to cart!`);
 
 };
