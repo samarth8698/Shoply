@@ -63,6 +63,7 @@ const newProducts = [
 
 const NewArrivals = () => {
 const handleAddToCart = (product) => {
+  alert("NEW ARRIVALS CODE RUNNING");
 const cart =
 JSON.parse(localStorage.getItem("cartItems")) || [];
 
