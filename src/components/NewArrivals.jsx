@@ -90,6 +90,8 @@ localStorage.setItem(
   JSON.stringify(cart)
 );
 
+console.log("Saved cart:", localStorage.getItem("cartItems"));
+
 window.dispatchEvent(new Event("cartUpdated"));
 
 alert(`${product.name} added to cart!`);
