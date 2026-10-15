@@ -79,7 +79,7 @@ if (existingItem) {
     name: product.name,
     category: product.category,
     price: product.price,
-    image: product.image,
+    imageUrl: product.image,
     rating: product.rating,
     quantity: 1,
   });
