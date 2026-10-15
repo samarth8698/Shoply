@@ -64,7 +64,7 @@ const newProducts = [
 const NewArrivals = () => {
 const handleAddToCart = (product) => {
 const cart =
-JSON.parse(localStorage.getItem("cart")) || [];
+  JSON.parse(localStorage.getItem("cartItems")) || [];
 
 
 const existingItem = cart.find(
@@ -86,7 +86,7 @@ if (existingItem) {
 }
 
 localStorage.setItem(
-  "cart",
+  "cartItems",
   JSON.stringify(cart)
 );
 
