@@ -17,6 +17,7 @@ const Cart = () => {
     setCartItems(updatedCart);
 
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   const increaseQuantity = (id) => {

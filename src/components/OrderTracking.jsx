@@ -132,11 +132,27 @@ const OrderTracking = () => {
         </p>
 
         <p>
-          <strong>Payment:</strong> {order.paymentMethod}
+          <strong>Payment Method:</strong> {order.paymentMethod}
         </p>
 
         <p>
-          <strong>Status:</strong> {order.status}
+          <strong>Payment Status:</strong> SUCCESS
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+
+          <span
+            className={`ml-2 rounded-full px-3 py-1 text-sm font-medium ${
+              order.status === "Delivered"
+                ? "bg-green-100 text-green-700"
+                : order.status === "Cancelled"
+                  ? "bg-red-100 text-red-700"
+                  : "bg-yellow-100 text-yellow-700"
+            }`}
+          >
+            {order.status}
+          </span>
         </p>
 
         <p>
@@ -145,6 +161,10 @@ const OrderTracking = () => {
 
         <p>
           <strong>Order Date:</strong> {order.orderDate}
+        </p>
+
+        <p>
+          <strong>Estimated Delivery:</strong> 3-5 Business Days
         </p>
       </div>
 

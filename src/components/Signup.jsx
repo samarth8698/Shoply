@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import "animate.css";
+import { signup } from "../services/authService";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -9,11 +10,12 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  fullName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
+});
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -22,12 +24,13 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
       !formData.fullName ||
       !formData.email ||
+      !formData.phone ||
       !formData.password ||
       !formData.confirmPassword
     ) {
@@ -45,46 +48,35 @@ const Signup = () => {
       return;
     }
 
-    const existingUser = JSON.parse(
-      localStorage.getItem("shoplyUser")
-    );
-
-    if (
-      existingUser &&
-      existingUser.email === formData.email
-    ) {
-      alert("Account already exists");
-      return;
-    }
-
-    localStorage.setItem(
-      "shoplyUser",
-      JSON.stringify({
+    try {
+      const response = await signup({
         fullName: formData.fullName,
         email: formData.email,
+        phone: formData.phone,
         password: formData.password,
-      })
-    );
+      });
 
-    alert("Account Created Successfully");
+      alert(response.message);
+
+      navigate("/login");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration Failed");
+    }
 
     setFormData({
       fullName: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     });
-
-    navigate("/login");
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-10">
       <div className="animate__animated animate__fadeInUp w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-900">
-            Create Account
-          </h1>
+          <h1 className="text-3xl font-bold text-slate-900">Create Account</h1>
 
           <p className="mt-2 text-slate-500">
             Join Shoply and start shopping today
@@ -138,6 +130,21 @@ const Signup = () => {
 
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-700">
+              Phone Number
+            </label>
+
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter phone number"
+              className="h-12 w-full rounded-xl border border-slate-200 px-4 outline-none transition focus:border-violet-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Password
             </label>
 
@@ -161,11 +168,7 @@ const Signup = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
               >
-                {showPassword ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>

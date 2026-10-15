@@ -8,12 +8,21 @@ import {
   Globe,
   Mail,
   Phone,
+  Package,
+  Truck,
+  Lock,
+  LogOut,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 
 const Layout = ({ children }) => {
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true",
+  );
 
   const [cartCount, setCartCount] = useState(0);
 
@@ -28,14 +37,29 @@ const Layout = ({ children }) => {
       setCartCount(count);
     };
 
+    // Initial Load
     updateCartCount();
 
+    // Other Browser Tabs
     window.addEventListener("storage", updateCartCount);
+
+    // Same Tab Updates
+    window.addEventListener("cartUpdated", updateCartCount);
 
     return () => {
       window.removeEventListener("storage", updateCartCount);
+      window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
+
+    setIsLoggedIn(false);
+
+    window.location.href = "/login";
+  };
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
@@ -110,19 +134,27 @@ const Layout = ({ children }) => {
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className="hidden font-semibold text-slate-700 md:block"
-            >
-              Login
-            </Link>
+            {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/login"
+                  className="hidden font-semibold text-slate-700 md:block"
+                >
+                  Login
+                </Link>
 
-            <Link
-              to="/signup"
-              className="hidden rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 font-semibold text-white md:block"
-            >
-              Sign Up
-            </Link>
+                <Link
+                  to="/signup"
+                  className="hidden rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 font-semibold text-white md:block"
+                >
+                  Sign Up
+                </Link>
+              </>
+            ) : (
+              <span className="hidden font-semibold text-green-600 md:block">
+                Welcome
+              </span>
+            )}
 
             <Link to="/wishlist">
               <Heart size={20} className="transition hover:text-red-500" />
@@ -148,22 +180,49 @@ const Layout = ({ children }) => {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-3 w-52 rounded-xl border bg-white shadow-lg">
+                <div className="absolute right-0 mt-3 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-violet-50 hover:text-violet-600"
+                  >
+                    <User size={18} />
+                    My Profile
+                  </Link>
+
                   <Link
                     to="/my-orders"
-                    className="block px-4 py-3 hover:bg-slate-100"
+                    className="flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-violet-50 hover:text-violet-600"
                   >
+                    <Package size={18} />
                     My Orders
                   </Link>
 
                   <Link
                     to="/track-order"
-                    className="block px-4 py-3 hover:bg-slate-100"
+                    className="flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-violet-50 hover:text-violet-600"
                   >
+                    <Truck size={18} />
                     Track Order
                   </Link>
 
-                  <button className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50">
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate("/change-password");
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-slate-100"
+                  >
+                    <Lock size={18} />
+                    Change Password
+                  </button>
+
+                  <hr className="my-2" />
+
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-600 transition hover:bg-red-50"
+                  >
+                    <LogOut size={18} />
                     Logout
                   </button>
                 </div>

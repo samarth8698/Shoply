@@ -1,5 +1,9 @@
 // src/components/ShopDetails.jsx
 
+import ReviewList from "./ReviewList";
+import ReviewForm from "./ReviewForm";
+import { getReviews } from "../services/reviewService";
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProductById } from "../services/productService";
@@ -20,10 +24,21 @@ const ShopDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     loadProduct();
+    loadReviews();
   }, [id]);
+
+  const loadReviews = async () => {
+    try {
+      const response = await getReviews(id);
+      setReviews(response.data);
+    } catch (error) {
+      console.error("Error loading reviews:", error);
+    }
+  };
 
   const loadProduct = async () => {
     try {
@@ -46,9 +61,7 @@ const ShopDetails = () => {
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-    const existingProduct = cart.find(
-      (item) => item.id === product.id
-    );
+    const existingProduct = cart.find((item) => item.id === product.id);
 
     let updatedCart = [];
 
@@ -59,7 +72,7 @@ const ShopDetails = () => {
               ...item,
               quantity: item.quantity + quantity,
             }
-          : item
+          : item,
       );
     } else {
       updatedCart = [
@@ -84,7 +97,6 @@ const ShopDetails = () => {
   return (
     <section className="animate__animated animate__fadeIn py-10">
       <div className="grid gap-12 lg:grid-cols-2">
-
         {/* Left Side */}
         <div>
           <div className="overflow-hidden rounded-3xl border bg-white shadow-lg">
@@ -111,10 +123,7 @@ const ShopDetails = () => {
 
         {/* Right Side */}
         <div>
-
-          <h1 className="text-4xl font-bold text-slate-900">
-            {product.name}
-          </h1>
+          <h1 className="text-4xl font-bold text-slate-900">{product.name}</h1>
 
           <div className="mt-4">
             <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
@@ -126,48 +135,33 @@ const ShopDetails = () => {
             ₹{Number(product.price).toLocaleString()}
           </h2>
 
-          <p className="mt-6 leading-8 text-slate-600">
-            {product.description}
-          </p>
+          <p className="mt-6 leading-8 text-slate-600">{product.description}</p>
 
           {/* Quantity */}
           <div className="mt-8">
-            <h3 className="mb-4 text-lg font-semibold">
-              Quantity
-            </h3>
+            <h3 className="mb-4 text-lg font-semibold">Quantity</h3>
 
             <div className="flex items-center gap-4">
-
               <button
-                onClick={() =>
-                  setQuantity((prev) =>
-                    prev > 1 ? prev - 1 : 1
-                  )
-                }
+                onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
                 className="rounded-xl border p-3 hover:bg-slate-100"
               >
                 <Minus size={18} />
               </button>
 
-              <span className="text-xl font-bold">
-                {quantity}
-              </span>
+              <span className="text-xl font-bold">{quantity}</span>
 
               <button
-                onClick={() =>
-                  setQuantity((prev) => prev + 1)
-                }
+                onClick={() => setQuantity((prev) => prev + 1)}
                 className="rounded-xl border p-3 hover:bg-slate-100"
               >
                 <Plus size={18} />
               </button>
-
             </div>
           </div>
 
           {/* Buttons */}
           <div className="mt-8 flex flex-wrap gap-4">
-
             <button
               onClick={handleAddToCart}
               className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-8 py-4 font-semibold text-white transition hover:scale-105"
@@ -182,41 +176,39 @@ const ShopDetails = () => {
             >
               <Heart size={20} />
             </button>
-
           </div>
 
           {/* Features */}
           <div className="mt-10 space-y-5 rounded-3xl border bg-white p-6 shadow">
-
             <div className="flex items-center gap-3">
-              <Truck
-                size={22}
-                className="text-violet-600"
-              />
+              <Truck size={22} className="text-violet-600" />
               <span>Free Shipping on Orders Above ₹999</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <ShieldCheck
-                size={22}
-                className="text-violet-600"
-              />
+              <ShieldCheck size={22} className="text-violet-600" />
               <span>100% Secure Payment</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <RotateCcw
-                size={22}
-                className="text-violet-600"
-              />
+              <RotateCcw size={22} className="text-violet-600" />
               <span>7 Days Easy Return Policy</span>
             </div>
-
           </div>
         </div>
       </div>
 
-            {/* Related Products */}
+      {/* Reviews Section */}
+
+      <section className="mt-20">
+        <h2 className="mb-8 text-3xl font-bold">Customer Reviews</h2>
+
+        <ReviewList reviews={reviews} />
+
+        <ReviewForm productId={product.id} onReviewAdded={loadReviews} />
+      </section>
+
+      {/* Related Products */}
       <section className="mt-20">
         <h2 className="mb-8 text-3xl font-bold text-slate-900">
           Related Products
@@ -239,9 +231,7 @@ const ShopDetails = () => {
                   Related Product
                 </h3>
 
-                <p className="mt-2 text-xl font-bold text-violet-600">
-                  ₹1,999
-                </p>
+                <p className="mt-2 text-xl font-bold text-violet-600">₹1,999</p>
 
                 <button className="mt-5 w-full rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 py-3 font-semibold text-white transition hover:opacity-90">
                   View Product

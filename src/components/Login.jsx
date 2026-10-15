@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import "animate.css";
+import { login } from "../services/authService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,9 +34,7 @@ const Login = () => {
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-        formData.email
-      )
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
     ) {
       newErrors.email = "Enter a valid email address";
     }
@@ -43,14 +42,13 @@ const Login = () => {
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password =
-        "Password must be at least 6 characters";
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -60,29 +58,30 @@ const Login = () => {
       return;
     }
 
-    const savedUser = JSON.parse(
-      localStorage.getItem("shoplyUser")
-    );
+    try {
+  const response = await login({
+    email: formData.email,
+    password: formData.password,
+  });
 
-    if (!savedUser) {
-      alert(
-        "No account found. Please create an account first."
-      );
-      return;
-    }
+  if (!response.token) {
+    alert(response.message);
+    return;
+  }
 
-    if (
-      savedUser.email === formData.email &&
-      savedUser.password === formData.password
-    ) {
-      localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("token", response.token);
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("userEmail", formData.email);
 
-      alert("Login Successful");
+  console.log("Saved Email:", formData.email);
+  console.log("Stored Email:", localStorage.getItem("userEmail"));
 
-      navigate("/");
-    } else {
-      alert("Invalid Email or Password");
-    }
+  alert(response.message);
+
+  window.location.href = "/";
+} catch (error) {
+  alert(error.response?.data?.message || "Login Failed");
+}
   };
 
   return (
@@ -90,13 +89,9 @@ const Login = () => {
       <div className="animate__animated animate__fadeInUp w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-900">
-            Welcome Back
-          </h1>
+          <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
 
-          <p className="mt-2 text-slate-500">
-            Sign in to your Shoply account
-          </p>
+          <p className="mt-2 text-slate-500">Sign in to your Shoply account</p>
         </div>
 
         {/* Form */}
@@ -128,9 +123,7 @@ const Login = () => {
             </div>
 
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.email}
-              </p>
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
 
@@ -161,39 +154,31 @@ const Login = () => {
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowPassword(!showPassword)
-                }
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
               >
-                {showPassword ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.password}
-              </p>
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
             )}
           </div>
 
           {/* Remember + Forgot */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 text-slate-600">
-              <input
-                type="checkbox"
-                className="rounded border-slate-300"
-              />
+              <input type="checkbox" className="rounded border-slate-300" />
               Remember me
             </label>
 
-            <span className="font-medium text-violet-600">
+            <Link
+              to="/forgot-password"
+              className="font-medium text-violet-600 hover:underline"
+            >
               Forgot Password?
-            </span>
+            </Link>
           </div>
 
           {/* Submit */}
@@ -209,9 +194,7 @@ const Login = () => {
         <div className="my-6 flex items-center">
           <div className="h-px flex-1 bg-slate-200"></div>
 
-          <span className="px-4 text-sm text-slate-400">
-            OR
-          </span>
+          <span className="px-4 text-sm text-slate-400">OR</span>
 
           <div className="h-px flex-1 bg-slate-200"></div>
         </div>

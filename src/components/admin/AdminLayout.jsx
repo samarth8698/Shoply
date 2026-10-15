@@ -8,7 +8,9 @@ import {
   Bell,
   UserCircle,
   LogOut,
+  CreditCard,
 } from "lucide-react";
+
 import { useState } from "react";
 
 const AdminLayout = () => {
@@ -36,6 +38,11 @@ const AdminLayout = () => {
       path: "/admin/users",
       icon: <Users size={20} />,
     },
+    {
+      name: "Payments",
+      path: "/admin/payments",
+      icon: <CreditCard size={20} />,
+    },
   ];
 
   return (
@@ -47,9 +54,7 @@ const AdminLayout = () => {
         } bg-slate-900 text-white transition-all duration-300`}
       >
         <div className="flex items-center justify-between border-b border-slate-700 p-5">
-          {sidebarOpen && (
-            <h1 className="text-xl font-bold">Admin Panel</h1>
-          )}
+          {sidebarOpen && <h1 className="text-xl font-bold">Admin Panel</h1>}
 
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             <Menu size={22} />
@@ -63,9 +68,7 @@ const AdminLayout = () => {
               to={menu.path}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-xl px-4 py-3 transition ${
-                  isActive
-                    ? "bg-violet-600 text-white"
-                    : "hover:bg-slate-800"
+                  isActive ? "bg-violet-600 text-white" : "hover:bg-slate-800"
                 }`
               }
             >

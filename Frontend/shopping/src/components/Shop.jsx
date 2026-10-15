@@ -1,7 +1,7 @@
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import "animate.css";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getProducts } from "../services/productService";
 import { toast } from "react-toastify";
 import {
@@ -11,20 +11,17 @@ import {
 } from "../services/wishlistService";
 
 const Shop = () => {
+  const [searchParams] = useSearchParams();
+
   const [products, setProducts] = useState([]);
-
   const [wishlist, setWishlist] = useState([]);
-
   const [search, setSearch] = useState("");
-
   const [sortPrice, setSortPrice] = useState("");
-
   const [filteredProducts, setFilteredProducts] = useState([]);
-
   const [selectedBrand, setSelectedBrand] = useState("");
-
-  const [selectedCategory, setSelectedCategory] = useState("");
-
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || ""
+  );
   const [priceRange, setPriceRange] = useState("");
 
   useEffect(() => {
@@ -32,29 +29,50 @@ const Shop = () => {
     loadWishlist();
   }, []);
 
+  // Load Products and Apply Category Filter
   const loadProducts = async () => {
     try {
       const response = await getProducts();
-      setProducts(response.data);
-      setFilteredProducts(response.data);
+      const allProducts = response.data;
+
+      setProducts(allProducts);
+
+      const categoryFromURL = searchParams.get("category") || "";
+
+      setSelectedCategory(categoryFromURL);
+
+      if (categoryFromURL) {
+        const filtered = allProducts.filter(
+          (product) => product.category === categoryFromURL
+        );
+
+        setFilteredProducts(filtered);
+      } else {
+        setFilteredProducts(allProducts);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error loading products:", error);
+      toast.error("Failed to load products");
     }
   };
 
+  // Load Wishlist
   const loadWishlist = async () => {
     try {
       const data = await getWishlist();
       setWishlist(data);
     } catch (error) {
-      console.error(error);
+      console.error("Error loading wishlist:", error);
     }
   };
 
+  // Add Product to Cart
   const handleAddToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-    const existingProduct = cart.find((item) => item.id === product.id);
+    const existingProduct = cart.find(
+      (item) => item.id === product.id
+    );
 
     if (existingProduct) {
       existingProduct.quantity += 1;
@@ -72,10 +90,11 @@ const Shop = () => {
     toast.success(`${product.name} added to cart`);
   };
 
+  // Add or Remove Wishlist
   const handleWishlist = async (product) => {
     try {
       const existingItem = wishlist.find(
-        (item) => item.productId === product.id,
+        (item) => item.productId === product.id
       );
 
       if (existingItem) {
@@ -89,53 +108,67 @@ const Shop = () => {
           price: product.price,
           imageUrl: product.imageUrl,
         });
+
         toast.success("Added to Wishlist");
       }
 
-      loadWishlist();
+      await loadWishlist();
     } catch (error) {
-      console.error(error);
+      console.error("Wishlist error:", error);
+      toast.error("Unable to update wishlist");
     }
   };
 
-  
-
+  // Apply All Filters
   const applyFilters = (
     searchValue = search,
     brand = selectedBrand,
     category = selectedCategory,
     price = priceRange,
-    sort = sortPrice,
+    sort = sortPrice
   ) => {
     let filtered = [...products];
 
-    // Search
+    // Search Filter
     if (searchValue.trim() !== "") {
       filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchValue.toLowerCase()),
+        (product.name || "")
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
       );
     }
 
-    // Brand
+    // Brand Filter
     if (brand !== "") {
-      filtered = filtered.filter((product) => product.brand === brand);
+      filtered = filtered.filter(
+        (product) => product.brand === brand
+      );
     }
 
-    // Category
+    // Category Filter
     if (category !== "") {
-      filtered = filtered.filter((product) => product.category === category);
+      filtered = filtered.filter(
+        (product) => product.category === category
+      );
     }
 
-    // Price Range
+    // Price Filter
     if (price === "0-1000") {
-      filtered = filtered.filter((p) => p.price <= 1000);
+      filtered = filtered.filter(
+        (product) => product.price <= 1000
+      );
     } else if (price === "1000-10000") {
-      filtered = filtered.filter((p) => p.price > 1000 && p.price <= 10000);
+      filtered = filtered.filter(
+        (product) =>
+          product.price > 1000 && product.price <= 10000
+      );
     } else if (price === "10000+") {
-      filtered = filtered.filter((p) => p.price > 10000);
+      filtered = filtered.filter(
+        (product) => product.price > 10000
+      );
     }
 
-    // Sort
+    // Price Sorting
     if (sort === "low") {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sort === "high") {
@@ -145,43 +178,83 @@ const Shop = () => {
     setFilteredProducts(filtered);
   };
 
+  // Handle Price Sorting
   const handlePriceFilter = (value) => {
     setSortPrice(value);
-    applyFilters(search, selectedBrand, selectedCategory, priceRange, value);
+
+    applyFilters(
+      search,
+      selectedBrand,
+      selectedCategory,
+      priceRange,
+      value
+    );
+  };
+
+  // Handle Category Change
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+
+    applyFilters(
+      search,
+      selectedBrand,
+      value,
+      priceRange,
+      sortPrice
+    );
+  };
+
+  // Clear All Filters
+  const handleClearFilters = () => {
+    setSearch("");
+    setSelectedBrand("");
+    setSelectedCategory("");
+    setPriceRange("");
+    setSortPrice("");
+
+    setFilteredProducts(products);
   };
 
   return (
     <section className="animate__animated animate__fadeIn py-8">
       <div className="mb-10">
+        {/* Search and Filters */}
         <div className="mb-8">
           <input
             type="text"
             placeholder="Search Products..."
             value={search}
             onChange={(e) => {
-              setSearch(e.target.value);
+              const value = e.target.value;
+
+              setSearch(value);
+
               applyFilters(
-                e.target.value,
+                value,
                 selectedBrand,
                 selectedCategory,
                 priceRange,
-                sortPrice,
+                sortPrice
               );
             }}
             className="w-full rounded-2xl border border-slate-300 px-5 py-3 focus:border-violet-600 focus:outline-none"
           />
 
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {/* Brand Filter */}
             <select
               value={selectedBrand}
               onChange={(e) => {
-                setSelectedBrand(e.target.value);
+                const value = e.target.value;
+
+                setSelectedBrand(value);
+
                 applyFilters(
                   search,
-                  e.target.value,
+                  value,
                   selectedCategory,
                   priceRange,
-                  sortPrice,
+                  sortPrice
                 );
               }}
               className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
@@ -194,18 +267,12 @@ const Shop = () => {
               <option value="Adidas">Adidas</option>
             </select>
 
+            {/* Category Filter */}
             <select
               value={selectedCategory}
-              onChange={(e) => {
-                setSelectedCategory(e.target.value);
-                applyFilters(
-                  search,
-                  selectedBrand,
-                  e.target.value,
-                  priceRange,
-                  sortPrice,
-                );
-              }}
+              onChange={(e) =>
+                handleCategoryChange(e.target.value)
+              }
               className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
             >
               <option value="">All Categories</option>
@@ -214,45 +281,70 @@ const Shop = () => {
               <option value="Shoes">Shoes</option>
               <option value="Accessories">Accessories</option>
               <option value="Sports">Sports</option>
+              <option value="Mobiles">Mobiles</option>
+              <option value="Audio">Audio</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Books">Books</option>
             </select>
           </div>
 
+          {/* Price Range */}
           <div className="mt-4">
             <select
               value={priceRange}
               onChange={(e) => {
-                setPriceRange(e.target.value);
+                const value = e.target.value;
+
+                setPriceRange(value);
+
                 applyFilters(
                   search,
                   selectedBrand,
                   selectedCategory,
-                  e.target.value,
-                  sortPrice,
+                  value,
+                  sortPrice
                 );
               }}
               className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
             >
               <option value="">All Prices</option>
               <option value="0-1000">₹0 - ₹1000</option>
-              <option value="1000-10000">₹1000 - ₹10000</option>
+              <option value="1000-10000">
+                ₹1000 - ₹10000
+              </option>
               <option value="10000+">Above ₹10000</option>
             </select>
           </div>
 
-          <div className="mt-4">
+          {/* Sorting */}
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <select
               value={sortPrice}
-              onChange={(e) => handlePriceFilter(e.target.value)}
+              onChange={(e) =>
+                handlePriceFilter(e.target.value)
+              }
               className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
             >
               <option value="">Sort By Price</option>
-              <option value="low">Price : Low to High</option>
-              <option value="high">Price : High to Low</option>
+              <option value="low">Price: Low to High</option>
+              <option value="high">Price: High to Low</option>
             </select>
+
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="rounded-xl border border-violet-600 px-4 py-3 font-medium text-violet-600 transition hover:bg-violet-600 hover:text-white"
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
+
+        {/* Page Heading */}
         <h1 className="text-4xl font-bold text-slate-900 md:text-5xl">
-          Shop Collection
+          {selectedCategory
+            ? `${selectedCategory} Products`
+            : "Shop Collection"}
         </h1>
 
         <p className="mt-3 text-slate-500">
@@ -260,12 +352,14 @@ const Shop = () => {
         </p>
       </div>
 
+      {/* No Products Found */}
       {filteredProducts.length === 0 && (
         <div className="mb-6 rounded-xl border bg-red-50 p-4 text-center text-red-600">
           No Products Found
         </div>
       )}
 
+      {/* Product Cards */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((product) => (
           <Link
@@ -274,18 +368,25 @@ const Shop = () => {
             className="block"
           >
             <div className="group overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              {/* Product Image */}
               <div className="relative h-80 overflow-hidden bg-white">
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     handleWishlist(product);
                   }}
                   className="absolute right-4 top-4 z-10 rounded-xl bg-white p-2 shadow-md"
+                  aria-label="Toggle wishlist"
                 >
                   <Heart
                     size={18}
                     className={
-                      wishlist.some((item) => item.productId === product.id)
+                      wishlist.some(
+                        (item) =>
+                          item.productId === product.id
+                      )
                         ? "fill-red-500 text-red-500"
                         : "text-slate-700"
                     }
@@ -299,6 +400,7 @@ const Shop = () => {
                 />
               </div>
 
+              {/* Product Details */}
               <div className="p-6">
                 <p className="text-sm font-medium text-violet-600">
                   {product.description}
@@ -309,7 +411,10 @@ const Shop = () => {
                 </h3>
 
                 <div className="mt-3 flex items-center gap-2">
-                  <Star size={16} className="fill-yellow-400 text-yellow-400" />
+                  <Star
+                    size={16}
+                    className="fill-yellow-400 text-yellow-400"
+                  />
 
                   <span className="text-sm font-medium text-slate-600">
                     Stock: {product.quantity}
@@ -322,8 +427,10 @@ const Shop = () => {
                   </span>
 
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       handleAddToCart(product);
                     }}
                     className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-4 py-2 font-medium text-white transition hover:scale-105"

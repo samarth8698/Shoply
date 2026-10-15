@@ -3,6 +3,7 @@ import "animate.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../services/productService";
+import { toast } from "react-toastify";
 import {
   getWishlist,
   addWishlist,
@@ -12,30 +13,43 @@ import {
 const Shop = () => {
   const [products, setProducts] = useState([]);
 
- const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+
+  const [search, setSearch] = useState("");
+
+  const [sortPrice, setSortPrice] = useState("");
+
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  const [selectedBrand, setSelectedBrand] = useState("");
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [priceRange, setPriceRange] = useState("");
 
   useEffect(() => {
-  loadProducts();
-  loadWishlist();
-}, []);
+    loadProducts();
+    loadWishlist();
+  }, []);
 
   const loadProducts = async () => {
     try {
       const response = await getProducts();
       setProducts(response.data);
+      setFilteredProducts(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   const loadWishlist = async () => {
-  try {
-    const data = await getWishlist();
-    setWishlist(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
+    try {
+      const data = await getWishlist();
+      setWishlist(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleAddToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -53,36 +67,190 @@ const Shop = () => {
 
     localStorage.setItem("cartItems", JSON.stringify(cart));
 
-    alert(`${product.name} added to cart`);
+    window.dispatchEvent(new Event("cartUpdated"));
+
+    toast.success(`${product.name} added to cart`);
   };
 
   const handleWishlist = async (product) => {
-  try {
-    const existingItem = wishlist.find(
-      (item) => item.productId === product.id,
-    );
+    try {
+      const existingItem = wishlist.find(
+        (item) => item.productId === product.id,
+      );
 
-    if (existingItem) {
-      await deleteWishlist(existingItem.id);
-    } else {
-      await addWishlist({
-        productId: product.id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-      });
+      if (existingItem) {
+        await deleteWishlist(existingItem.id);
+        toast.info("Removed from Wishlist");
+      } else {
+        await addWishlist({
+          productId: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+        });
+        toast.success("Added to Wishlist");
+      }
+
+      loadWishlist();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+
+  const applyFilters = (
+    searchValue = search,
+    brand = selectedBrand,
+    category = selectedCategory,
+    price = priceRange,
+    sort = sortPrice,
+  ) => {
+    let filtered = [...products];
+
+    // Search
+    if (searchValue.trim() !== "") {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase()),
+      );
     }
 
-    loadWishlist();
-  } catch (error) {
-    console.error(error);
-  }
-};
+    // Brand
+    if (brand !== "") {
+      filtered = filtered.filter((product) => product.brand === brand);
+    }
+
+    // Category
+    if (category !== "") {
+      filtered = filtered.filter((product) => product.category === category);
+    }
+
+    // Price Range
+    if (price === "0-1000") {
+      filtered = filtered.filter((p) => p.price <= 1000);
+    } else if (price === "1000-10000") {
+      filtered = filtered.filter((p) => p.price > 1000 && p.price <= 10000);
+    } else if (price === "10000+") {
+      filtered = filtered.filter((p) => p.price > 10000);
+    }
+
+    // Sort
+    if (sort === "low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sort === "high") {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(filtered);
+  };
+
+  const handlePriceFilter = (value) => {
+    setSortPrice(value);
+    applyFilters(search, selectedBrand, selectedCategory, priceRange, value);
+  };
 
   return (
     <section className="animate__animated animate__fadeIn py-8">
       <div className="mb-10">
+        <div className="mb-8">
+          <input
+            type="text"
+            placeholder="Search Products..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              applyFilters(
+                e.target.value,
+                selectedBrand,
+                selectedCategory,
+                priceRange,
+                sortPrice,
+              );
+            }}
+            className="w-full rounded-2xl border border-slate-300 px-5 py-3 focus:border-violet-600 focus:outline-none"
+          />
+
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <select
+              value={selectedBrand}
+              onChange={(e) => {
+                setSelectedBrand(e.target.value);
+                applyFilters(
+                  search,
+                  e.target.value,
+                  selectedCategory,
+                  priceRange,
+                  sortPrice,
+                );
+              }}
+              className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
+            >
+              <option value="">All Brands</option>
+              <option value="Apple">Apple</option>
+              <option value="Samsung">Samsung</option>
+              <option value="Nike">Nike</option>
+              <option value="Puma">Puma</option>
+              <option value="Adidas">Adidas</option>
+            </select>
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                applyFilters(
+                  search,
+                  selectedBrand,
+                  e.target.value,
+                  priceRange,
+                  sortPrice,
+                );
+              }}
+              className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
+            >
+              <option value="">All Categories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Sports">Sports</option>
+            </select>
+          </div>
+
+          <div className="mt-4">
+            <select
+              value={priceRange}
+              onChange={(e) => {
+                setPriceRange(e.target.value);
+                applyFilters(
+                  search,
+                  selectedBrand,
+                  selectedCategory,
+                  e.target.value,
+                  sortPrice,
+                );
+              }}
+              className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
+            >
+              <option value="">All Prices</option>
+              <option value="0-1000">₹0 - ₹1000</option>
+              <option value="1000-10000">₹1000 - ₹10000</option>
+              <option value="10000+">Above ₹10000</option>
+            </select>
+          </div>
+
+          <div className="mt-4">
+            <select
+              value={sortPrice}
+              onChange={(e) => handlePriceFilter(e.target.value)}
+              className="rounded-xl border border-slate-300 px-4 py-3 focus:border-violet-600 focus:outline-none"
+            >
+              <option value="">Sort By Price</option>
+              <option value="low">Price : Low to High</option>
+              <option value="high">Price : High to Low</option>
+            </select>
+          </div>
+        </div>
         <h1 className="text-4xl font-bold text-slate-900 md:text-5xl">
           Shop Collection
         </h1>
@@ -92,8 +260,14 @@ const Shop = () => {
         </p>
       </div>
 
+      {filteredProducts.length === 0 && (
+        <div className="mb-6 rounded-xl border bg-red-50 p-4 text-center text-red-600">
+          No Products Found
+        </div>
+      )}
+
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Link
             key={product.id}
             to={`/product/${product.id}`}

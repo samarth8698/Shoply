@@ -1,4 +1,14 @@
 // src/App.jsx
+
+import Profile from "./components/Profile";
+import ChangePassword from "./components/ChangePassword";
+
+import ForgotPassword from "./components/ForgotPassword";
+import VerifyOtp from "./components/VerifyOtp";
+import ResetPassword from "./components/ResetPassword";
+
+import Payments from "./components/admin/Payments";
+
 import OrderTracking from "./components/OrderTracking";
 import MyOrders from "./components/MyOrders";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -39,6 +49,10 @@ function App() {
       <Routes>
         {/* Authentication Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* Website Routes */}
@@ -150,6 +164,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/profile"
+          element={
+            <Layout>
+              <Profile />
+            </Layout>
+          }
+        />
+
         {/* Admin Routes */}
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -158,6 +181,7 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
+          <Route path="payments" element={<Payments />} />
         </Route>
       </Routes>
     </BrowserRouter>
