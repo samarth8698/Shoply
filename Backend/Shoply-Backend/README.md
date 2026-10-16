@@ -6,9 +6,12 @@ The application follows a layered architecture with controllers, services, repos
 
 🌐 Live Deployment
 
+GitHub Repository :-  https://github.com/samarth8698/Shoply
+
 Backend API :- https://shoply-backend-p6zl.onrender.com
 
-GitHub Repository :-  https://github.com/samarth8698/Shoply
+
+🛍️ Products API :- [Shoply Products API](https://shoply-backend-p6zl.onrender.com/products)
 
 
 ## ✨ Features :-
