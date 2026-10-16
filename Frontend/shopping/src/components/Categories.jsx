@@ -9,6 +9,8 @@ import {
   Sofa,
   ArrowRight,
 } from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
 import "animate.css";
 
 const categories = [
@@ -51,6 +53,12 @@ const categories = [
 ];
 
 const Categories = () => {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/shop?category=${encodeURIComponent(categoryName)}`);
+  };
+
   return (
     <section className="animate__animated animate__fadeIn py-8">
       {/* Section Header */}
@@ -65,7 +73,11 @@ const Categories = () => {
           </p>
         </div>
 
-        <button className="flex items-center gap-2 font-semibold text-violet-600 transition hover:text-violet-700">
+        <button
+          type="button"
+          onClick={() => navigate("/shop")}
+          className="flex items-center gap-2 font-semibold text-violet-600 transition hover:text-violet-700"
+        >
           View All
           <ArrowRight size={18} />
         </button>
@@ -77,9 +89,11 @@ const Categories = () => {
           const Icon = category.icon;
 
           return (
-            <div
+            <button
               key={category.id}
-              className="group cursor-pointer rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl"
+              type="button"
+              onClick={() => handleCategoryClick(category.name)}
+              className="group w-full cursor-pointer rounded-3xl border border-slate-200 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl"
             >
               <div className="flex items-center justify-between">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
@@ -99,7 +113,7 @@ const Categories = () => {
               <p className="mt-2 text-slate-500">
                 {category.products}
               </p>
-            </div>
+            </button>
           );
         })}
       </div>
