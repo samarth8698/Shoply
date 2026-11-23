@@ -83,7 +83,8 @@ const Checkout = () => {
         return;
       }
 
-      const razorpayOrder = await createOrder(500);
+      // इथे 500 ऐवजी total व्हेरिएबल पास केला आहे
+      const razorpayOrder = await createOrder(total);
 
       const options = {
         key: "rzp_test_TE9OzmTZDzBCAD",
