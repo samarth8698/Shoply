@@ -10,10 +10,7 @@ import com.shoply.service.ProductService;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = {
-    "http://localhost:5173",
-    "https://shoply-zeta-two.vercel.app"
-})
+@CrossOrigin(origins = {"http://localhost:5173", "https://shoply-zeta-two.vercel.app", "https://shoply-ilvmxh9dm-todos-list.vercel.app", "https://shoply-265t6wnqt-todos-list.vercel.app"})
 public class ProductController {
 
     @Autowired
