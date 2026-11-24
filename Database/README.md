@@ -4,7 +4,9 @@ Shoply is an e-commerce application that uses MySQL as its relational database. 
 
 The database is accessed by the Shoply backend application using Spring Data JPA and Hibernate.
 
-## 📌 Database Information
+
+
+## 📌 Database Information:-
 
 | Property         | Details                    |
 | ---------------- | -------------------------- |
@@ -14,9 +16,9 @@ The database is accessed by the Shoply backend application using Spring Data JPA
 | Data Access      | Spring Data JPA            |
 | Database Purpose | E-commerce data management |
 
----
 
-## ✨ Database Features
+
+## ✨ Database Features:-
 
 * Store user account information
 * Manage user roles
@@ -207,7 +209,6 @@ The database connection is configured through the backend's application properti
 * Back up important data regularly.
 * Use a migration strategy for production schema changes.
 
----
 
 ## 🚀 Deployment
 
@@ -221,5 +222,5 @@ Configure the production database connection through the backend's deployment en
 Do not place production database credentials in this README.
 
 
-👨‍💻 Author :-
+👨‍💻 Developer :-
             *Samarth Subhash Adhao*
