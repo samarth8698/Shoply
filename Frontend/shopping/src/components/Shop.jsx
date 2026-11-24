@@ -261,10 +261,11 @@ const Shop = () => {
             >
               <option value="">All Brands</option>
               <option value="Apple">Apple</option>
-              <option value="Samsung">Samsung</option>
-              <option value="Nike">Nike</option>
-              <option value="Puma">Puma</option>
-              <option value="Adidas">Adidas</option>
+              <option value="Samsung">HP Victus</option>
+              <option value="Nike">Dell Pavillion</option>
+              <option value="Puma">Bags</option>
+              <option value="Adidas">BoAt</option>
+              <option value="Adidas">Logitech</option>
             </select>
 
             {/* Category Filter */}
