@@ -410,5 +410,5 @@ The precise build and start commands depend on the existing Render service confi
 
 
 
-👨‍💻 Author :-
+👨‍💻 Developer :-
             *Samarth Subhash Adhao*
