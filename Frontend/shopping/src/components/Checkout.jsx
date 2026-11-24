@@ -83,7 +83,8 @@ const Checkout = () => {
         return;
       }
 
-      // इथे 500 ऐवजी total व्हेरिएबल पास केला आहे
+      console.log("PAYMENT TOTAL AMOUNT IS:", total);
+
       const razorpayOrder = await createOrder(total);
 
       const options = {
