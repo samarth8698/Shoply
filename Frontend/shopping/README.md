@@ -300,5 +300,5 @@ Deployment Steps :-
 * Improve the overall shopping experience.
 
 
-👨‍💻 Author :-
+👨‍💻 Developer :-
           *Samarth Subhash Adhao*
